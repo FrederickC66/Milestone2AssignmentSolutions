@@ -6,7 +6,7 @@
     xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee 
                         https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
   
-  <display-name>Milestone2 Assignment Solution - Java 21 Web Application</display-name>
+  <display-name>Milestone2AssignmentSolution</display-name>
   
   <!-- Welcome file list -->
   <welcome-file-list>
@@ -18,16 +18,5 @@
   <session-config>
     <session-timeout>30</session-timeout>
   </session-config>
-  
-  <!-- Error page configuration -->
-  <error-page>
-    <error-code>404</error-code>
-    <location>/error/404.jsp</location>
-  </error-page>
-  
-  <error-page>
-    <error-code>500</error-code>
-    <location>/error/500.jsp</location>
-  </error-page>
   
 </web-app>

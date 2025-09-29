@@ -10,13 +10,13 @@
         <div>
             <h1>Zumba Class</h1>
             <div class="login-box">
-                <form action="#" method="post">
+                <form action="login" method="post">
                     <input type="email" name="email" placeholder="Email" required>
                     <input type="password" name="password" placeholder="Password" required>
                     <button type="submit">Login</button>
                 </form>
             </div>
-            <button class="create-account-btn">Create Account</button>
+            <button onclick="window.location.href='register'">Create Account</button>
         </div>
     </main>
 </body>

@@ -1,3 +1,8 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
 main {
     display: flex;
     justify-content: center;
@@ -28,19 +33,19 @@ h1 {
 }
 
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="text"],
+input[type="tel"] {
     width: 100%;
     padding: 12px;
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 16px;
-    transition: border-color 0.3s;
     box-sizing: border-box;
 }
 
 input:focus {
-    border-color: #4CAF50;
     outline: none;
 }
 
