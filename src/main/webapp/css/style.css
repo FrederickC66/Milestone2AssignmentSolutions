@@ -35,7 +35,8 @@ h1 {
 input[type="email"],
 input[type="password"],
 input[type="text"],
-input[type="tel"] {
+input[type="tel"],
+select {
     width: 100%;
     padding: 12px;
     margin: 10px 0;
@@ -43,10 +44,13 @@ input[type="tel"] {
     border-radius: 6px;
     font-size: 16px;
     box-sizing: border-box;
+    background-color: white;
 }
 
-input:focus {
+input:focus,
+select:focus {
     outline: none;
+    border-color: #4CAF50;
 }
 
 button {

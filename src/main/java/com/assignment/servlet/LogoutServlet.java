@@ -8,23 +8,26 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet("/dashboard")
-public class DashboardServlet extends HttpServlet {
+@WebServlet("/logout")
+public class LogoutServlet extends HttpServlet {
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        // Check if user is authenticated
+        // Get the session and invalidate it
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("isLoggedIn") == null || 
-            !(Boolean)session.getAttribute("isLoggedIn")) {
-            // User not logged in, redirect to login page
-            response.sendRedirect("index.jsp?error=please_login");
-            return;
+        if (session != null) {
+            session.invalidate();
         }
         
-        // User is authenticated, forward to dashboard page
-        request.getRequestDispatcher("participant-dashboard.jsp").forward(request, response);
+        // Redirect to login page
+        response.sendRedirect("index.jsp");
+    }
+    
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        doGet(request, response);
     }
 }

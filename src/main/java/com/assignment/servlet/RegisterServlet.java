@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import com.assignment.util.DatabaseUtil;
+import org.mindrot.jbcrypt.BCrypt;
 
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
@@ -62,68 +63,68 @@ public class RegisterServlet extends HttpServlet {
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
         String password = request.getParameter("password");
-        String userType = request.getParameter("user_type");
-        
-        // Set default user type if not provided
-        if (userType == null || userType.trim().isEmpty()) {
-            userType = "participant";
-        }
-        
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
         
         // Validate required fields
-        if (name == null || email == null || password == null || 
+        if (name == null || email == null || password == null ||
             name.trim().isEmpty() || email.trim().isEmpty() || password.trim().isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            out.println("{\"error\": \"Name, email, and password are required\"}");
+            response.sendRedirect("register.jsp?error=missing_fields");
             return;
         }
         
         try (Connection conn = DatabaseUtil.getConnection()) {
-            // Check if user already exists
-            String checkSql = "SELECT id FROM users WHERE email = ?";
-            PreparedStatement checkStmt = conn.prepareStatement(checkSql);
-            checkStmt.setString(1, email);
-            ResultSet rs = checkStmt.executeQuery();
+            // Check if user already exists in both tables
+            boolean emailExists = false;
             
-            if (rs.next()) {
-                response.setStatus(HttpServletResponse.SC_CONFLICT);
-                out.println("{\"error\": \"User with this email already exists\"}");
+            // Check users table
+            String checkUserSql = "SELECT id FROM users WHERE email = ?";
+            PreparedStatement checkUserStmt = conn.prepareStatement(checkUserSql);
+            checkUserStmt.setString(1, email.trim());
+            ResultSet userRs = checkUserStmt.executeQuery();
+            
+            if (userRs.next()) {
+                emailExists = true;
+            }
+            
+            // Check owners table
+            if (!emailExists) {
+                String checkOwnerSql = "SELECT id FROM owners WHERE email = ?";
+                PreparedStatement checkOwnerStmt = conn.prepareStatement(checkOwnerSql);
+                checkOwnerStmt.setString(1, email.trim());
+                ResultSet ownerRs = checkOwnerStmt.executeQuery();
+                
+                if (ownerRs.next()) {
+                    emailExists = true;
+                }
+            }
+            
+            if (emailExists) {
+                response.sendRedirect("register.jsp?error=email_exists");
                 return;
             }
             
-            // Insert new user
+            // Hash the password using BCrypt
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+            
+            // Insert into users table (all registrations are participants)
             String insertSql = "INSERT INTO users (name, email, phone, password, user_type) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement insertStmt = conn.prepareStatement(insertSql, PreparedStatement.RETURN_GENERATED_KEYS);
-            insertStmt.setString(1, name);
-            insertStmt.setString(2, email);
-            insertStmt.setString(3, phone);
-            insertStmt.setString(4, password); // Note: In production, you should hash this password
-            insertStmt.setString(5, userType);
+            PreparedStatement insertStmt = conn.prepareStatement(insertSql);
+            insertStmt.setString(1, name.trim());
+            insertStmt.setString(2, email.trim());
+            insertStmt.setString(3, phone != null ? phone.trim() : null);
+            insertStmt.setString(4, hashedPassword);
+            insertStmt.setString(5, "participant");
             
             int rowsAffected = insertStmt.executeUpdate();
             
             if (rowsAffected > 0) {
-                ResultSet generatedKeys = insertStmt.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    int userId = generatedKeys.getInt(1);
-                    response.setStatus(HttpServletResponse.SC_CREATED);
-                    out.println("{");
-                    out.println("  \"success\": true,");
-                    out.println("  \"message\": \"User created successfully\",");
-                    out.println("  \"user_id\": " + userId);
-                    out.println("}");
-                }
+                response.sendRedirect("index.jsp?success=registration_successful");
             } else {
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                out.println("{\"error\": \"Failed to create user\"}");
+                response.sendRedirect("register.jsp?error=registration_failed");
             }
             
         } catch (SQLException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.println("{\"error\": \"Database error: " + e.getMessage() + "\"}");
+            e.printStackTrace();
+            response.sendRedirect("register.jsp?error=database_error");
         }
     }
 }
