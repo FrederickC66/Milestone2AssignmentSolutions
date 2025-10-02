@@ -5,11 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <link rel="stylesheet" type="text/css" href="css/global.css">
     <link rel="stylesheet" type="text/css" href="css/register.css">
 </head>
 <body>
     <main>
-        <div>
+        <div class="form-container">
             <h1>Create Account</h1>
             <form action="register" method="post">
                 <div class="login-box">

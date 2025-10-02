@@ -4,6 +4,7 @@
 <html>
 <head>
     <title>Owner Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="css/global.css">
     <link rel="stylesheet" type="text/css" href="css/owner-dashboard.css">
 </head>
 <body>

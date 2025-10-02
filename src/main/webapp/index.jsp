@@ -4,6 +4,7 @@
 <html>
 <head>
     <title>Zumba Class - Login</title>
+    <link rel="stylesheet" type="text/css" href="css/global.css">
     <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body>
@@ -23,7 +24,7 @@
                 </div>
             </c:if>
             
-            <div class="login-box">
+            <div class="form-container">
                 <form action="login" method="post">
                     <input type="email" name="email" placeholder="Email" required>
                     <input type="password" name="password" placeholder="Password" required>

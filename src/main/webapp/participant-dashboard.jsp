@@ -5,6 +5,7 @@
 <html>
 <head>
     <title>Participant Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="css/global.css">
     <link rel="stylesheet" type="text/css" href="css/participant-dashboard.css">
 </head>
 <body>
