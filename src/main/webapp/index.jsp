@@ -13,26 +13,14 @@
             
             <%-- Display error messages --%>
             <c:if test="${not empty param.error}">
-                <c:choose>
-                    <c:when test="${param.error == 'invalid_credentials'}">
-                        <c:set var="errorMessage" value="Invalid email or password. Please try again." />
-                    </c:when>
-                    <c:when test="${param.error == 'missing_fields'}">
-                        <c:set var="errorMessage" value="Please enter both email and password." />
-                    </c:when>
-                    <c:when test="${param.error == 'database_error'}">
-                        <c:set var="errorMessage" value="System error. Please try again later." />
-                    </c:when>
-                    <c:when test="${param.error == 'please_login'}">
-                        <c:set var="errorMessage" value="Please log in to access the dashboard." />
-                    </c:when>
-                </c:choose>
-                
-                <c:if test="${not empty errorMessage}">
-                    <div style="color: red; text-align: center; margin-bottom: 15px; padding: 10px; background-color: #ffe6e6; border: 1px solid #ff9999; border-radius: 5px;">
-                        ${errorMessage}
-                    </div>
-                </c:if>
+                <div style="color: red; text-align: center; margin-bottom: 15px; padding: 10px; background-color: #ffe6e6; border: 1px solid #ff9999; border-radius: 5px;">
+                    <c:choose>
+                        <c:when test="${param.error == 'invalid_credentials'}">Invalid email or password. Please try again.</c:when>
+                        <c:when test="${param.error == 'missing_fields'}">Please enter both email and password.</c:when>
+                        <c:when test="${param.error == 'database_error'}">System error. Please try again later.</c:when>
+                        <c:when test="${param.error == 'please_login'}">Please log in to access the dashboard.</c:when>
+                    </c:choose>
+                </div>
             </c:if>
             
             <div class="login-box">

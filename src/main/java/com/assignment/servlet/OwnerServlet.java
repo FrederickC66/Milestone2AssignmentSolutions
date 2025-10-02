@@ -41,39 +41,31 @@ public class OwnerServlet extends HttpServlet {
             return;
         }
         
-        // Fetch participant names from database
+        // Fetch participant names and batch assignments from database
         List<String> participantNames = new ArrayList<>();
-        Map<String, String> morningBatch = new HashMap<>();
-        Map<String, String> eveningBatch = new HashMap<>();
+        Map<String, String> participantBatches = new HashMap<>();
         
         try (Connection conn = DatabaseUtil.getConnection()) {
             // Get all participants
-            String sql = "SELECT id, name FROM users WHERE user_type = 'participant' ORDER BY name";
+            String sql = "SELECT name FROM users WHERE user_type = 'participant' ORDER BY name";
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
             
-            Map<Integer, String> participantMap = new HashMap<>();
             while (rs.next()) {
-                int id = rs.getInt("id");
                 String name = rs.getString("name");
                 participantNames.add(name);
-                participantMap.put(id, name);
+                participantBatches.put(name, ""); // Default to unassigned
             }
             
-            // Get batch assignments
-            String batchSql = "SELECT participant_id, participant_name, batch_type FROM batch_assignments";
+            // Get batch assignments and update the map
+            String batchSql = "SELECT participant_name, batch_type FROM batch_assignments";
             PreparedStatement batchStmt = conn.prepareStatement(batchSql);
             ResultSet batchRs = batchStmt.executeQuery();
             
             while (batchRs.next()) {
                 String name = batchRs.getString("participant_name");
                 String batchType = batchRs.getString("batch_type");
-                
-                if ("morning".equals(batchType)) {
-                    morningBatch.put(name, name);
-                } else if ("evening".equals(batchType)) {
-                    eveningBatch.put(name, name);
-                }
+                participantBatches.put(name, batchType);
             }
             
         } catch (SQLException e) {
@@ -81,10 +73,9 @@ public class OwnerServlet extends HttpServlet {
             // If there's an error, continue with empty lists
         }
         
-        // Add data to request
+        // Add simplified data to request
         request.setAttribute("participantNames", participantNames);
-        request.setAttribute("morningBatch", new ArrayList<>(morningBatch.keySet()));
-        request.setAttribute("eveningBatch", new ArrayList<>(eveningBatch.keySet()));
+        request.setAttribute("participantBatches", participantBatches);
         
         // User is authenticated and is an owner, forward to owner dashboard
         request.getRequestDispatcher("owner-dashboard.jsp").forward(request, response);
