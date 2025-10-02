@@ -7,7 +7,7 @@ body {
 }
 
 .logout-btn {
-    background: #2196F3;
+    background-color: #2196F3;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -27,136 +27,114 @@ body {
 }
 
 .main-container {
-    margin-top: 80px;
+    margin-top: 60px;
     display: flex;
     justify-content: center;
     align-items: flex-start;
     width: 100%;
-    gap: 30px;
-    padding: 0 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 15px;
 }
 
+/* Participants container */
 .participants-container {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+}
+
+.participants-container h2 {
+    color: #333;
+    margin-bottom: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.participants-list {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 6px;
 }
 
-.batch-containers {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-}
-
-.batch-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.participants-list, 
-.batch-list {
-    width: 400px;
-    min-height: 300px;
-    padding: 20px;
-    border: none;
-    border-radius: 10px;
-    background: white;
-}
-
-.batch-list {
-    min-height: 135px;
-}
-
-.participant-item {
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 6px;
-    padding: 10px 15px;
-    margin: 5px 0;
-    cursor: move;
-    user-select: none;
+.participant-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 8px 12px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
     transition: all 0.3s;
 }
 
-.participant-item:hover {
+.participant-row:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.participant-item.dragging {
-    opacity: 0.5;
-}
-
-.remove-btn {
-    background: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 3px 8px;
-    cursor: pointer;
-    font-size: 12px;
-    transition: background-color 0.3s;
-}
-
-.remove-btn:hover {
-    background-color: #c82333;
-}
-
-h2 {
+.participant-name {
+    font-weight: 500;
     color: #333;
-    margin-bottom: 20px;
-    text-align: center;
+    font-size: 13px;
 }
 
-.submit-container {
-    margin-top: 30px;
-    text-align: center;
-}
-
-.submit-btn {
-    background: #4CAF50;
-    color: white;
-    padding: 15px 30px;
-    border: none;
-    border-radius: 6px;
+.batch-select {
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    color: #333;
+    font-size: 11px;
     cursor: pointer;
-    font-size: 16px;
     transition: background-color 0.3s;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-width: 100px;
+    font-weight: 500;
 }
 
-.submit-btn:hover {
-    background-color: #45a049;
+.batch-select:focus {
+    outline: none;
 }
 
-.submit-btn:disabled {
-    background: #6c757d;
-    cursor: not-allowed;
+.batch-select:hover {
+    border-color: #adb5bd;
+}
+
+.batch-select option {
+    padding: 8px;
 }
 
 .empty-state {
     color: #6c757d;
     font-style: italic;
     text-align: center;
-    padding: 20px;
+    padding: 20px 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    font-size: 14px;
 }
 
 .notification {
     position: fixed;
-    top: 10px;
+    top: 20px;
     left: 50%;
     transform: translateX(-50%);
     padding: 15px 30px;
-    color: black;
-    font-weight: bold;
+    color: white;
+    font-weight: 500;
     z-index: 1000;
     display: none;
-    border-radius: 5px;
+    border-radius: 6px;
     text-align: center;
     min-width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .notification.show {
@@ -164,9 +142,38 @@ h2 {
 }
 
 .notification.success {
-    background: #28a745;
+    background-color: #4CAF50;
 }
 
 .notification.error {
-    background: #dc3545;
+    background-color: #dc3545;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .participant-row {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+        padding: 8px 12px;
+    }
+    
+    .batch-select {
+        min-width: 100%;
+        font-size: 12px;
+    }
+    
+    .main-container {
+        padding: 0 10px;
+        margin-top: 50px;
+    }
+    
+    .participants-container {
+        padding: 15px;
+    }
+    
+    .participants-container h2 {
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
 }

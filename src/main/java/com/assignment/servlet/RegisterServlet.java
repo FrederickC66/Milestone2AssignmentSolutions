@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,43 +15,6 @@ import org.mindrot.jbcrypt.BCrypt;
 
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
-    
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-        // For testing: return all users as JSON
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
-        
-        try (Connection conn = DatabaseUtil.getConnection()) {
-            String sql = "SELECT id, name, email, user_type, created_at FROM users";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
-            
-            out.println("[");
-            boolean first = true;
-            while (rs.next()) {
-                if (!first) {
-                    out.println(",");
-                }
-                out.println("  {");
-                out.println("    \"id\": " + rs.getInt("id") + ",");
-                out.println("    \"name\": \"" + rs.getString("name") + "\",");
-                out.println("    \"email\": \"" + rs.getString("email") + "\",");
-                out.println("    \"user_type\": \"" + rs.getString("user_type") + "\",");
-                out.println("    \"created_at\": \"" + rs.getTimestamp("created_at") + "\"");
-                out.print("  }");
-                first = false;
-            }
-            out.println();
-            out.println("]");
-            
-        } catch (SQLException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.println("{\"error\": \"Database error: " + e.getMessage() + "\"}");
-        }
-    }
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 

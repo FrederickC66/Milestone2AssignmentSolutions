@@ -103,6 +103,53 @@ public class OwnerServlet extends HttpServlet {
             return;
         }
         
+        String action = request.getParameter("action");
+        
+        if ("updateBatch".equals(action)) {
+            // Handle individual batch assignment update
+            handleBatchUpdate(request, response);
+        } else {
+            // Handle bulk batch assignment (original functionality)
+            handleBulkBatchUpdate(request, response);
+        }
+    }
+    
+    private void handleBatchUpdate(HttpServletRequest request, HttpServletResponse response) 
+            throws IOException {
+        
+        String participantName = request.getParameter("participantName");
+        String batch = request.getParameter("batch");
+        
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        
+        if (participantName == null || participantName.trim().isEmpty()) {
+            response.getWriter().write("{\"success\":false,\"message\":\"Invalid participant name\"}");
+            return;
+        }
+        
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            // First, remove any existing batch assignment for this participant
+            String deleteSql = "DELETE FROM batch_assignments WHERE participant_name = ?";
+            PreparedStatement deleteStmt = conn.prepareStatement(deleteSql);
+            deleteStmt.setString(1, participantName.trim());
+            deleteStmt.executeUpdate();
+            
+            // If batch is not empty, insert new assignment
+            if (batch != null && !batch.trim().isEmpty()) {
+                insertBatchAssignment(conn, participantName.trim(), batch.trim());
+            }
+            
+            response.getWriter().write("{\"success\":true,\"message\":\"Batch assignment updated successfully\"}");
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.getWriter().write("{\"success\":false,\"message\":\"Database error: " + e.getMessage() + "\"}");
+        }
+    }
+    
+    private void handleBulkBatchUpdate(HttpServletRequest request, HttpServletResponse response) 
+            throws IOException {
         // Get batch assignment data from request
         String[] morningParticipants = request.getParameterValues("morningBatch");
         String[] eveningParticipants = request.getParameterValues("eveningBatch");
