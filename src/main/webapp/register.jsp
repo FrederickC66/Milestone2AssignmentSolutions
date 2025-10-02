@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="css/register.css">
 </head>
 <body>
     <main>
@@ -17,9 +17,6 @@
                 </div>
                 <div class="login-box">
                     <input type="email" name="email" placeholder="Email Address" required>
-                </div>
-                <div class="login-box">
-                    <input type="tel" name="phone" placeholder="Phone Number" required>
                 </div>
                 <div class="login-box">
                     <input type="password" name="password" placeholder="Password" required>

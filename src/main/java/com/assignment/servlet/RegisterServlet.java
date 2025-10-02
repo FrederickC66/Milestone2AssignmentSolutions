@@ -26,7 +26,7 @@ public class RegisterServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         
         try (Connection conn = DatabaseUtil.getConnection()) {
-            String sql = "SELECT id, name, email, phone, user_type, created_at FROM users";
+            String sql = "SELECT id, name, email, user_type, created_at FROM users";
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
             
@@ -40,7 +40,6 @@ public class RegisterServlet extends HttpServlet {
                 out.println("    \"id\": " + rs.getInt("id") + ",");
                 out.println("    \"name\": \"" + rs.getString("name") + "\",");
                 out.println("    \"email\": \"" + rs.getString("email") + "\",");
-                out.println("    \"phone\": \"" + rs.getString("phone") + "\",");
                 out.println("    \"user_type\": \"" + rs.getString("user_type") + "\",");
                 out.println("    \"created_at\": \"" + rs.getTimestamp("created_at") + "\"");
                 out.print("  }");
@@ -61,7 +60,6 @@ public class RegisterServlet extends HttpServlet {
         // Get form parameters
         String name = request.getParameter("name");
         String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
         String password = request.getParameter("password");
         
         // Validate required fields
@@ -106,13 +104,12 @@ public class RegisterServlet extends HttpServlet {
             String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
             
             // Insert into users table (all registrations are participants)
-            String insertSql = "INSERT INTO users (name, email, phone, password, user_type) VALUES (?, ?, ?, ?, ?)";
+            String insertSql = "INSERT INTO users (name, email, password, user_type) VALUES (?, ?, ?, ?)";
             PreparedStatement insertStmt = conn.prepareStatement(insertSql);
             insertStmt.setString(1, name.trim());
             insertStmt.setString(2, email.trim());
-            insertStmt.setString(3, phone != null ? phone.trim() : null);
-            insertStmt.setString(4, hashedPassword);
-            insertStmt.setString(5, "participant");
+            insertStmt.setString(3, hashedPassword);
+            insertStmt.setString(4, "participant");
             
             int rowsAffected = insertStmt.executeUpdate();
             

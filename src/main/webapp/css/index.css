@@ -50,7 +50,6 @@ select {
 input:focus,
 select:focus {
     outline: none;
-    border-color: #4CAF50;
 }
 
 button {
