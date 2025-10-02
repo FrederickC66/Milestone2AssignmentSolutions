@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,33 +12,28 @@
             <h1>Zumba Class</h1>
             
             <%-- Display error messages --%>
-            <%
-                String error = request.getParameter("error");
-                if (error != null) {
-                    String errorMessage = "";
-                    switch (error) {
-                        case "invalid_credentials":
-                            errorMessage = "Invalid email or password. Please try again.";
-                            break;
-                        case "missing_fields":
-                            errorMessage = "Please enter both email and password.";
-                            break;
-                        case "database_error":
-                            errorMessage = "System error. Please try again later.";
-                            break;
-                        case "please_login":
-                            errorMessage = "Please log in to access the dashboard.";
-                            break;
-                    }
-                    if (!errorMessage.isEmpty()) {
-            %>
-                        <div style="color: red; text-align: center; margin-bottom: 15px; padding: 10px; background-color: #ffe6e6; border: 1px solid #ff9999; border-radius: 5px;">
-                            <%= errorMessage %>
-                        </div>
-            <%
-                    }
-                }
-            %>
+            <c:if test="${not empty param.error}">
+                <c:choose>
+                    <c:when test="${param.error == 'invalid_credentials'}">
+                        <c:set var="errorMessage" value="Invalid email or password. Please try again." />
+                    </c:when>
+                    <c:when test="${param.error == 'missing_fields'}">
+                        <c:set var="errorMessage" value="Please enter both email and password." />
+                    </c:when>
+                    <c:when test="${param.error == 'database_error'}">
+                        <c:set var="errorMessage" value="System error. Please try again later." />
+                    </c:when>
+                    <c:when test="${param.error == 'please_login'}">
+                        <c:set var="errorMessage" value="Please log in to access the dashboard." />
+                    </c:when>
+                </c:choose>
+                
+                <c:if test="${not empty errorMessage}">
+                    <div style="color: red; text-align: center; margin-bottom: 15px; padding: 10px; background-color: #ffe6e6; border: 1px solid #ff9999; border-radius: 5px;">
+                        ${errorMessage}
+                    </div>
+                </c:if>
+            </c:if>
             
             <div class="login-box">
                 <form action="login" method="post">

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,36 +14,31 @@
         <div class="participants-container">
             <h2>Participant Batch Assignments</h2>
             <div class="participants-list">
-                <%
-                    List<String> participantNames = (List<String>) request.getAttribute("participantNames");
-                    List<String> morningBatch = (List<String>) request.getAttribute("morningBatch");
-                    List<String> eveningBatch = (List<String>) request.getAttribute("eveningBatch");
-                    
-                    if (participantNames != null && !participantNames.isEmpty()) {
-                        for (String name : participantNames) {
-                            String currentBatch = "";
-                            if (morningBatch != null && morningBatch.contains(name)) {
-                                currentBatch = "morning";
-                            } else if (eveningBatch != null && eveningBatch.contains(name)) {
-                                currentBatch = "evening";
-                            }
-                %>
+                <c:choose>
+                    <c:when test="${not empty participantNames}">
+                        <c:forEach var="name" items="${participantNames}">
+                            <c:set var="currentBatch" value="" />
+                            <c:if test="${morningBatch.contains(name)}">
+                                <c:set var="currentBatch" value="morning" />
+                            </c:if>
+                            <c:if test="${eveningBatch.contains(name)}">
+                                <c:set var="currentBatch" value="evening" />
+                            </c:if>
+                            
                             <div class="participant-row">
-                                <span class="participant-name"><%= name %></span>
-                                <select class="batch-select" data-participant="<%= name %>" onchange="updateBatchAssignment(this)">
-                                    <option value="" <%= currentBatch.equals("") ? "selected" : "" %>>Unassigned</option>
-                                    <option value="morning" <%= currentBatch.equals("morning") ? "selected" : "" %>>Morning Batch</option>
-                                    <option value="evening" <%= currentBatch.equals("evening") ? "selected" : "" %>>Evening Batch</option>
+                                <span class="participant-name">${name}</span>
+                                <select class="batch-select" data-participant="${name}" onchange="updateBatchAssignment(this)">
+                                    <option value="" ${currentBatch == '' ? 'selected' : ''}>Unassigned</option>
+                                    <option value="morning" ${currentBatch == 'morning' ? 'selected' : ''}>Morning Batch</option>
+                                    <option value="evening" ${currentBatch == 'evening' ? 'selected' : ''}>Evening Batch</option>
                                 </select>
                             </div>
-                <%
-                        }
-                    } else {
-                %>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
                         <div class="empty-state">No participants found.</div>
-                <%
-                    }
-                %>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </div>
@@ -68,11 +64,6 @@
                 if (!data.success) {
                     location.reload();
                 }
-            })
-            .catch(error => {
-                selectElement.disabled = false;
-                console.error('Error:', error);
-                location.reload();
             });
         }
     </script>
