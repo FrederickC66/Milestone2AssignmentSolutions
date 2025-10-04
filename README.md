@@ -55,29 +55,9 @@ This system allows class owners to manage participants and assign them to mornin
 - **owners**: Class owners (id, name, email, password, access_level) 
 - **batch_assignments**: Batch assignments (participant_id, participant_name, batch_type)
 
-## Project Structure
-
-```
-src/main/
-├── java/com/assignment/
-│   ├── servlet/          # Controllers (Login, Register, Dashboard, Owner)
-│   └── util/             # Database utilities
-└── webapp/
-    ├── css/              # Stylesheets
-    ├── *.jsp             # Views (Login, Register, Dashboards)
-    └── WEB-INF/web.xml   # Configuration
-```
-
 ## Key Features
 
 - **Secure Authentication**: BCrypt hashing, session management
 - **Clean Architecture**: MVC pattern, JSTL templates
 - **Responsive Design**: Mobile-friendly interface
 - **Performance Optimized**: Connection pooling, efficient queries
-
-## Recent Optimizations
-
-- Simplified JSP logic (60% complexity reduction)
-- Consolidated CSS (80% redundancy elimination)
-- Modern JavaScript with fetch API
-- JSTL migration for cleaner templates
