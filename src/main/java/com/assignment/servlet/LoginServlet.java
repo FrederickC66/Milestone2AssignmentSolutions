@@ -65,7 +65,7 @@ public class LoginServlet extends HttpServlet {
             
             // If not found in users table, check owners table
             if (!userFound) {
-                String ownerSql = "SELECT id, name, email, password, FROM owners WHERE email = ?";
+                String ownerSql = "SELECT id, name, email, password, user_type FROM owners WHERE email = ?";
                 PreparedStatement ownerStmt = conn.prepareStatement(ownerSql);
                 ownerStmt.setString(1, email.trim());
                 ResultSet ownerRs = ownerStmt.executeQuery();
